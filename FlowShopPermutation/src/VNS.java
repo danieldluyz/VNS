@@ -38,9 +38,9 @@ public class VNS {
 				newListe = newListe.insert(newListe.getJob(j1), j2);
 				neighborhood.add(newListe);
 			}
-			//Hola Dani y Lau 
-			//Holaaaa
 		}
+			//Holaaaa
+
 		
 		return neighborhood;
 	}
