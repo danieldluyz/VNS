@@ -40,7 +40,10 @@ public class VNS {
 			}
 		}
 			//Holaaaa!DANI
-		///Bla bla
+		for(int i=0;i<listeNEH.nombreJobs();i++)
+		{
+			System.out.println("Lau estas muy buena ;) ;)");
+		}
 		return neighborhood;
 	}
 	
