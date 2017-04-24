@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 
 public class VNS {
@@ -43,6 +44,81 @@ public class VNS {
 		return neighborhood;
 	}
 	
+	public ListeJobs NS1(ListeJobs list)
+	{
+		boolean [] revisee= new boolean[list.nombreJobs()];
+		for(int i=0;i<revisee.length;i++)
+		{
+			revisee[i]=false;
+		}
+		
+		ListeJobs resp= list.clone();
+		
+		boolean tous_revise=tous_r(revisee);
+		
+		while(tous_revise==false)
+		{
+			int r= (int)(Math.random()*(revisee.length));
+			System.out.println("Voy a mover el : "+resp.getJob(r).getNumero());
+			int auxx=resp.getJob(r).getNumero();
+			boolean improve=false;
+			Ordonnancement o= new Ordonnancement(resp, flowshop.getNbMachines());
+			int actuel_Cmax=o.getDateDisponibilite(flowshop.getNbMachines()-1);
+			System.out.println("Lista actual: ");
+			resp.afficher();
+			System.out.println("El Cmax actual es: "+ actuel_Cmax);
+			if(revisee[r]==false)
+			{
+				revisee[r]=true;
+				int n=0;
+				while(improve==false && n<listeNEH.nombreJobs())
+				{
+					ListeJobs or=resp.clone();
+					resp.insert(resp.getJob(r), n);
+					n++;
+					System.out.println("Mover el trabajo "+auxx+" a la posicion "+n);
+					resp.afficher();
+					Ordonnancement aux= new Ordonnancement(resp, flowshop.getNbMachines());
+					int Cmax_aux= aux.getDateDisponibilite(flowshop.getNbMachines()-1);
+					System.out.println("El nuevo Cmax es: "+ Cmax_aux);
+					if(Cmax_aux>=actuel_Cmax)
+					{
+						resp=or;
+					}
+					else
+					{
+						improve=true;
+					}
+					System.out.println("Me quedo con : ");
+					resp.afficher();
+				}
+			}
+			else
+			{
+				r=(int)(Math.random()*(revisee.length-1));
+			}
+			tous_revise=tous_r(revisee);
+		}
+		Ordonnancement aux= new Ordonnancement(resp, flowshop.getNbMachines());
+		int Cmax_aux= aux.getDateDisponibilite(flowshop.getNbMachines()-1);
+		System.out.println("Lista final es:");
+		resp.afficher();
+		System.out.println("Con un Cmax de: "+Cmax_aux);
+		return resp;
+	}
+	public boolean tous_r(boolean[] tb)
+	{
+		boolean resp=true;
+		for(int i=0;i<tb.length;i++)
+		{
+			if(tb[i]==false)
+			{
+				resp=false;
+			}
+		}
+		return resp;
+	}
+	
 	public ListeJobs localMinimum(ListeJobs neighborhood) {
 		
 		Ordonnancement ordonnancement = new Ordonnancement(neighborhood, flowshop.getNbMachines());
@@ -60,16 +136,21 @@ public class VNS {
 		
 		VNS vns = new VNS(fs);
 		
-		System.out.println("Original : ");
-		vns.listeNEH.afficher();
+//		System.out.println("Original : ");
+//		vns.listeNEH.afficher();
 		
-		ArrayList<ListeJobs> neighborhood = vns.createNeighborhood(vns.listeNEH, 10);
-		
-		System.out.println("Vecindario : ");
-		for (int i = 0; i < neighborhood.size(); i++) {
-			neighborhood.get(i).afficher();
-		}
-		
+//		ArrayList<ListeJobs> neighborhood = vns.createNeighborhood(vns.listeNEH, 10);
+//		
+//		System.out.println("Vecindario : ");
+//		for (int i = 0; i < neighborhood.size(); i++) {
+//			neighborhood.get(i).afficher();
+//		}
+		ListeJobs list=new ListeJobs();
+		list.ajouterJob(j1);
+		list.ajouterJob(j3);
+		list.ajouterJob(j2);
+		list.ajouterJob(j4);
+		vns.NS1(list);
 	}
 	
 }
