@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Random;
 
 
 public class VNS {
@@ -9,8 +8,6 @@ public class VNS {
 	
 	public VNS(Flowshop fs){
 		flowshop = fs;
-		
-		ListeJobs liste = new ListeJobs();
 		listeNEH = fs.creerListeNEH();	
 	}
 	
@@ -210,12 +207,6 @@ public class VNS {
 		return resp;
 	}
 	
-	public ListeJobs localMinimum(ListeJobs neighborhood) {
-		
-		Ordonnancement ordonnancement = new Ordonnancement(neighborhood, flowshop.getNbMachines());
-		return null;
-	}
-	
 	public static void main(String[] args) {
 		
 		Job j1 = new Job(1, new int[]{5,9,8,10,1});
@@ -226,12 +217,6 @@ public class VNS {
 		Flowshop fs = new Flowshop(new Job[]{j1,j2,j3,j4}, 5);
 		
 		VNS vns = new VNS(fs);
-		
-		ListeJobs liste = new ListeJobs();
-		liste.ajouterJob(j1);
-		liste.ajouterJob(j3);
-		liste.ajouterJob(j2);
-		liste.ajouterJob(j4);
 		
 		System.out.println("Original : ");
 		vns.listeNEH.afficher();
@@ -249,15 +234,15 @@ public class VNS {
 //		ListeJobs ns2 = vns.ns2(vns.listeNEH);
 //		ns2.afficher();
 		
-		ListeJobs ns3 = vns.ns3(vns.listeNEH);
-		ns3.afficher();
+//		ListeJobs ns3 = vns.ns3(vns.listeNEH);
+//		ns3.afficher();
 		
-		ListeJobs list=new ListeJobs();
-		list.ajouterJob(j1);
-		list.ajouterJob(j3);
-		list.ajouterJob(j2);
-		list.ajouterJob(j4);
-		vns.NS1(list);
+//		ListeJobs list=new ListeJobs();
+//		list.ajouterJob(j1);
+//		list.ajouterJob(j3);
+//		list.ajouterJob(j2);
+//		list.ajouterJob(j4);
+//		vns.NS1(list);
 	}
 	
 }
