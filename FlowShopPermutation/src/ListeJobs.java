@@ -125,4 +125,13 @@ public class ListeJobs implements Cloneable, Iterable<Job> {
     	return this;
     }
  
+    public boolean equals(Object obj) {
+    	
+    	if (obj instanceof ListeJobs) {
+    		ListeJobs ls = (ListeJobs) obj;
+    		if (this.liste.equals(ls.liste)) return true;
+    	}
+    	
+    	return false;
+    }
 }

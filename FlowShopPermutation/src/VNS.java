@@ -15,7 +15,7 @@ public class VNS {
 		
 		ArrayList<ListeJobs> neighborhood = new ArrayList<ListeJobs>();
 		
-		for (int i = 0; i < numOps; i++) {
+		while (neighborhood.size()<numOps) {
 			int j1 = (int) (Math.random()*liste.nombreJobs());
 			int j2 = (int) (Math.random()*liste.nombreJobs());
 			
@@ -31,26 +31,21 @@ public class VNS {
 			//Swap
 			if (op==0){
 				newListe = newListe.swap(j1, j2);
-				neighborhood.add(newListe);
+				if (!neighborhood.contains(newListe)) neighborhood.add(newListe);
 			}
 			//Insert
 			else {
 				newListe = newListe.insert(newListe.getJob(j1), j2);
-				neighborhood.add(newListe);
+				if (!neighborhood.contains(newListe)) neighborhood.add(newListe);
 			}
 		}
-			//Holaaaa!DANI
-		for(int i=0;i<listeNEH.nombreJobs();i++)
-		{
-			System.out.println("Lau estas muy buena ;) ;)");
-		}
+		
 		return neighborhood;
 	}
 	
 	public ListeJobs localMinimum(ListeJobs neighborhood) {
 		
 		Ordonnancement ordonnancement = new Ordonnancement(neighborhood, flowshop.getNbMachines());
-		
 		return null;
 	}
 	
