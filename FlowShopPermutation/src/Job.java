@@ -135,4 +135,14 @@ public class Job implements java.lang.Comparable<Job>, Cloneable {
 		}
 		this.duree=sum;
     }
+    
+    public String toString() {
+    	String string = ""+numero;
+    	
+    	for (int i = 0; i < dureesOperations.length; i++) {
+			string = string+" "+dureesOperations[i];
+		}
+    	
+    	return string;
+    }
 }

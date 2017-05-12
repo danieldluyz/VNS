@@ -1,3 +1,7 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -209,11 +213,14 @@ public class VNS {
 	
 	public ListeJobs variableNeighborhoodSearch(){
 		
-		int nombreRepetitions = 100;
+		int nombreRepetitions = 100000;
 		int n = 1;
 		int k = 1;
 		ListeJobs meilleureListe = listeNEH;
-		while (n<=nombreRepetitions) {
+		
+		long debut = System.currentTimeMillis(); /* on récupère le temps de départ */
+		long fin = System.currentTimeMillis(); /* on récupère le temps de fin (qui sera égal à debut au commencement) */
+		while (fin < debut + 600000) { 
 
 			ListeJobs liste = new ListeJobs();
 			if (k==1) liste = ns1(meilleureListe);
@@ -233,38 +240,94 @@ public class VNS {
 			}
 			
 			n++;
+			fin = System.currentTimeMillis();     /* on récupère le nouveau temps */
 		}
 		
 		return meilleureListe;
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
-		Job j1 = new Job(1, new int[]{5,9,8,10,1});
-		Job j2 = new Job(2, new int[]{9,3,10,1,8});
-		Job j3 = new Job(3, new int[]{9,4,5,8,6});
-		Job j4 = new Job(4, new int[]{4,8,8,7,2});
+//		Job j1 = new Job(1, new int[]{5,9,8,10,1});
+//		Job j2 = new Job(2, new int[]{9,3,10,1,8});
+//		Job j3 = new Job(3, new int[]{9,4,5,8,6});
+//		Job j4 = new Job(4, new int[]{4,8,8,7,2});
+//		
+//		Flowshop fs = new Flowshop(new Job[]{j1,j2,j3,j4}, 5);
 		
-		Flowshop fs = new Flowshop(new Job[]{j1,j2,j3,j4}, 5);
+		try {
+			BufferedReader in = new BufferedReader(new FileReader("./test/tai21.txt"));
+			
+			String line;
+			
+			line = in.readLine();
+			
+			String[] ligne = line.split(" ");
+			
+			int nbJobs = Integer.parseInt(ligne[0]);
+			int nbMachines = Integer.parseInt(ligne[1]);
+			
+			Job[] jobs = new Job[nbJobs];
+			int i = 1;
+			
+			while((line = in.readLine()) != null)
+			{
+			    ligne = line.split(" ");
+			    int[] durees = new int[nbMachines];
+			    for (int j = 0; j < ligne.length; j++) {
+					durees[j] = Integer.parseInt(ligne[j]);
+				}
+			    Job job = new Job(i, durees);
+			    jobs[i-1] = job;
+			    i++;
+			}
+			in.close();
+			
+			Flowshop fs = new Flowshop(jobs, nbMachines);
+			
+			VNS vns = new VNS(fs);
+			
+			System.out.println("Original : ");
+			vns.listeNEH.afficher();
+			
+			ListeJobs meilleureListe = vns.variableNeighborhoodSearch();
+			
+			System.out.println("Final : ");
+			meilleureListe.afficher();
+			Ordonnancement ordonnancement = new Ordonnancement(meilleureListe, vns.flowshop.getNbMachines());
+			System.out.println(ordonnancement.getDateDisponibilite(vns.flowshop.getNbMachines()-1));
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		VNS vns = new VNS(fs);
-		
-//		ListeJobs list=new ListeJobs();
-//		list.ajouterJob(j1);
-//		list.ajouterJob(j3);
-//		list.ajouterJob(j2);
-//		list.ajouterJob(j4);
-//		vns.listeNEH = list;
-		
-		System.out.println("Original : ");
-		vns.listeNEH.afficher();
-		
-		ListeJobs meilleureListe = vns.variableNeighborhoodSearch();
-		
-		System.out.println("Final : ");
-		meilleureListe.afficher();
-		Ordonnancement ordonnancement = new Ordonnancement(meilleureListe, vns.flowshop.getNbMachines());
-		System.out.println(ordonnancement.getDateDisponibilite(vns.flowshop.getNbMachines()-1));
+//		Job j1 = new Job(1, new int[]{5,4,4,3});
+//		Job j2 = new Job(2, new int[]{5,4,4,6});
+//		Job j3 = new Job(3, new int[]{3,2,3,3});
+//		Job j4 = new Job(4, new int[]{6,4,4,2});
+//		Job j5 = new Job(5, new int[]{3,4,1,5});
+//		
+//		Flowshop fs = new Flowshop(new Job[]{j1,j2,j3,j4,j5}, 4);
+//		
+//		VNS vns = new VNS(fs);
+//		
+////		ListeJobs list=new ListeJobs();
+////		list.ajouterJob(j1);
+////		list.ajouterJob(j3);
+////		list.ajouterJob(j2);
+////		list.ajouterJob(j4);
+////		vns.listeNEH = list;
+//		
+//		System.out.println("Original : ");
+//		vns.listeNEH.afficher();
+//		
+//		ListeJobs meilleureListe = vns.variableNeighborhoodSearch();
+//		
+//		System.out.println("Final : ");
+//		meilleureListe.afficher();
+//		Ordonnancement ordonnancement = new Ordonnancement(meilleureListe, vns.flowshop.getNbMachines());
+//		System.out.println(ordonnancement.getDateDisponibilite(vns.flowshop.getNbMachines()-1));
 	}
 	
 }
